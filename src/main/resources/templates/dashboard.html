@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FleetOps</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">🚚</div>
+                <h2>FleetOps</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="/dashboard" class="active"><span class="icon">📊</span> Dashboard</a></li>
+                    <li><a href="/vehicles"><span class="icon">🚛</span> Vehicles</a></li>
+                    <li><a href="/drivers"><span class="icon">👤</span> Drivers</a></li>
+                    <li><a href="/fuel"><span class="icon">💧</span> Fuel Logs</a></li>
+                    <li><a href="/maintenance"><span class="icon">🔧</span> Maintenance</a></li>
+                    <li><a href="/reports"><span class="icon">📈</span> Reports</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="/login" class="logout-link"><span class="icon">🚪</span> Logout</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Top Navbar -->
+            <header class="topbar">
+                <div class="topbar-title">
+                    <h1>Dashboard</h1>
+                </div>
+                <div class="topbar-info">
+                    <div class="current-date" id="currentDate">Loading date...</div>
+                    <div class="user-profile">
+                        <div class="avatar">JM</div>
+                        <div class="user-info">
+                            <span class="user-name">John Manager</span>
+                            <span class="user-role">Administrator</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <main class="content">
+                <!-- Statistics Cards -->
+                <section class="stats-grid" id="statsGrid">
+                    <!-- Cards will be injected by JS -->
+                </section>
+
+                <!-- Recent Vehicles Table -->
+                <section class="recent-vehicles">
+                    <div class="section-header">
+                        <h2>Recent Vehicles</h2>
+                        <a href="/vehicles" class="btn-ghost">View All</a>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Vehicle Number</th>
+                                    <th>Brand</th>
+                                    <th>Model</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentVehiclesTableBody">
+                                <!-- Rows will be injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

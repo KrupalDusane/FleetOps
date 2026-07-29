@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FleetOps - Login</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .alert {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            text-align: center;
+        }
+        .alert-error {
+            background-color: #FEE2E2;
+            color: #B91C1C;
+            border: 1px solid #FCA5A5;
+        }
+        .alert-success {
+            background-color: #D1FAE5;
+            color: #047857;
+            border: 1px solid #6EE7B7;
+        }
+        .alert-warning {
+            background-color: #FEF3C7;
+            color: #B45309;
+            border: 1px solid #FDE68A;
+        }
+    </style>
+</head>
+<body>
+    <main class="login-container">
+        <div class="login-card">
+            <header class="login-header">
+                <div class="logo-placeholder">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="1" y="3" width="15" height="13"></rect>
+                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                        <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                        <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                    </svg>
+                </div>
+                <h1 class="title">FleetOps</h1>
+                <p class="subtitle">Smart Fleet Management System</p>
+                <h2 class="welcome-text">Welcome Back</h2>
+            </header>
+            
+            <div th:if="${param.error}" class="alert alert-error">
+                Invalid username or password.
+            </div>
+            <div th:if="${param.logout}" class="alert alert-success">
+                You have been logged out successfully.
+            </div>
+            <div th:if="${param.expired}" class="alert alert-warning">
+                Your session has expired or you do not have access. Please login again.
+            </div>
+
+            <form class="login-form" th:action="@{/login}" method="POST">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required autocomplete="username">
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+                </div>
+                
+                <button type="submit" class="btn-login">Sign In</button>
+            </form>
+            
+            <footer class="login-footer">
+                <p>&copy; 2026 FleetOps Logistics. All rights reserved.</p>
+            </footer>
+        </div>
+    </main>
+</body>
+</html>

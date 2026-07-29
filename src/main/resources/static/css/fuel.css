@@ -1,0 +1,43 @@
+/* Fuel Specific Styles */
+
+.total-calc-box {
+    background-color: #F8FAFC;
+    border: 1px dashed #CBD5E1;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.calc-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #64748B;
+}
+
+.calc-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0A2540;
+}
+
+/* Make table columns properly aligned for numbers */
+.data-table th:nth-child(3),
+.data-table th:nth-child(4),
+.data-table th:nth-child(5),
+.data-table th:nth-child(6),
+.data-table td:nth-child(3),
+.data-table td:nth-child(4),
+.data-table td:nth-child(5),
+.data-table td:nth-child(6) {
+    text-align: right;
+    padding-right: 24px;
+}
+
+/* Number highlights */
+.money-text {
+    font-weight: 600;
+    color: #0A2540;
+}

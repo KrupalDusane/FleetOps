@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel Logs - FleetOps</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/vehicle.css"> <!-- Reusing generic table/modal styles -->
+    <link rel="stylesheet" href="/css/fuel.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar (Reused) -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">🚚</div>
+                <h2>FleetOps</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="/dashboard"><span class="icon">📊</span> Dashboard</a></li>
+                    <li><a href="/vehicles"><span class="icon">🚛</span> Vehicles</a></li>
+                    <li><a href="/drivers"><span class="icon">👤</span> Drivers</a></li>
+                    <li><a href="/fuel" class="active"><span class="icon">💧</span> Fuel Logs</a></li>
+                    <li><a href="/maintenance"><span class="icon">🔧</span> Maintenance</a></li>
+                    <li><a href="/reports"><span class="icon">📈</span> Reports</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="/login" class="logout-link"><span class="icon">🚪</span> Logout</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Top Navbar (Reused) -->
+            <header class="topbar">
+                <div class="topbar-title">
+                    <h1>Fuel Logs</h1>
+                </div>
+                <div class="topbar-info">
+                    <div class="current-date" id="currentDate">Loading date...</div>
+                    <div class="user-profile">
+                        <div class="avatar">JM</div>
+                        <div class="user-info">
+                            <span class="user-name">John Manager</span>
+                            <span class="user-role">Administrator</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Fuel Logs Content -->
+            <main class="content">
+                
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <div class="toolbar-left">
+                        <div class="filter-box">
+                            <label for="dateFilter" style="font-size:12px; color:#64748B; margin-right:8px;">Date:</label>
+                            <input type="date" id="dateFilter" onchange="filterFuelLogs()">
+                        </div>
+                        <div class="filter-box">
+                            <label for="vehicleFilter" style="font-size:12px; color:#64748B; margin-right:8px;">Vehicle:</label>
+                            <select id="vehicleFilter" onchange="filterFuelLogs()">
+                                <option value="">All Vehicles</option>
+                                <!-- Injected dynamically by JS -->
+                            </select>
+                        </div>
+                        <button class="btn-secondary" style="padding: 8px 12px;" onclick="clearFilters()">Clear Filters</button>
+                    </div>
+                    <div class="toolbar-right">
+                        <button class="btn-primary" onclick="openAddModal()">+ Add Fuel Entry</button>
+                    </div>
+                </div>
+
+                <!-- Fuel Logs Table -->
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Vehicle</th>
+                                <th>Odometer (km)</th>
+                                <th>Quantity (L)</th>
+                                <th>Price/L</th>
+                                <th>Total Cost</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fuelTableBody">
+                            <!-- Rows injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Controls -->
+                <div class="pagination">
+                    <span class="page-info">Showing 0 entries</span>
+                    <div class="page-buttons"></div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Add/Edit Fuel Log Modal -->
+    <div id="fuelModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Fuel Entry</h2>
+                <button class="btn-close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="fuelForm" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="fuelLogId">
+                <div class="modal-body">
+                    <div class="form-row single-col">
+                        <div class="input-group">
+                            <label for="vehicleId">Vehicle *</label>
+                            <select id="vehicleId" required>
+                                <option value="">Select a Vehicle...</option>
+                                <!-- Injected dynamically by JS -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="fuelDate">Fuel Date *</label>
+                            <input type="date" id="fuelDate" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="odometerAtFueling">Odometer at Fueling (km) *</label>
+                            <input type="number" id="odometerAtFueling" min="0" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="fuelQuantity">Quantity (Litres) *</label>
+                            <input type="number" step="0.01" id="fuelQuantity" min="1" required oninput="calculateTotal()">
+                        </div>
+                        <div class="input-group">
+                            <label for="pricePerLitre">Price per Litre ($) *</label>
+                            <input type="number" step="0.01" id="pricePerLitre" min="0" required oninput="calculateTotal()">
+                        </div>
+                    </div>
+                    
+                    <!-- Auto Calculated Total Box -->
+                    <div class="total-calc-box">
+                        <span class="calc-label">Total Cost:</span>
+                        <span class="calc-value" id="totalCostDisplay">$0.00</span>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Entry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/fuel.js"></script>
+</body>
+</html>

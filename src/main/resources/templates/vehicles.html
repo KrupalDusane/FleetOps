@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Management - FleetOps</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/vehicle.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar (Reused) -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">🚚</div>
+                <h2>FleetOps</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="/dashboard"><span class="icon">📊</span> Dashboard</a></li>
+                    <li><a href="/vehicles" class="active"><span class="icon">🚛</span> Vehicles</a></li>
+                    <li><a href="/drivers"><span class="icon">👤</span> Drivers</a></li>
+                    <li><a href="/fuel"><span class="icon">💧</span> Fuel Logs</a></li>
+                    <li><a href="/maintenance"><span class="icon">🔧</span> Maintenance</a></li>
+                    <li><a href="/reports"><span class="icon">📈</span> Reports</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="/login" class="logout-link"><span class="icon">🚪</span> Logout</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Top Navbar (Reused) -->
+            <header class="topbar">
+                <div class="topbar-title">
+                    <h1>Vehicle Management</h1>
+                </div>
+                <div class="topbar-info">
+                    <div class="current-date" id="currentDate">Loading date...</div>
+                    <div class="user-profile">
+                        <div class="avatar">JM</div>
+                        <div class="user-info">
+                            <span class="user-name">John Manager</span>
+                            <span class="user-role">Administrator</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Vehicle Content -->
+            <main class="content">
+                
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <div class="toolbar-left">
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="searchInput" placeholder="Search vehicles..." onkeyup="searchVehicles()">
+                        </div>
+                        <div class="filter-box">
+                            <select id="statusFilter" onchange="filterVehicles()">
+                                <option value="">All Statuses</option>
+                                <option value="AVAILABLE">Available</option>
+                                <option value="IN_SERVICE">In Service</option>
+                                <option value="MAINTENANCE">Maintenance</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="toolbar-right">
+                        <button class="btn-primary" onclick="openAddModal()">+ Add Vehicle</button>
+                    </div>
+                </div>
+
+                <!-- Vehicles Table -->
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Vehicle Number</th>
+                                <th>Brand</th>
+                                <th>Model</th>
+                                <th>Year</th>
+                                <th>Fuel Type</th>
+                                <th>Odometer</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vehiclesTableBody">
+                            <!-- Rows injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Controls -->
+                <div class="pagination">
+                    <span class="page-info">Showing 1 to 10 of 42 entries</span>
+                    <div class="page-buttons">
+                        <button class="btn-page" disabled>Previous</button>
+                        <button class="btn-page active">1</button>
+                        <button class="btn-page">2</button>
+                        <button class="btn-page">3</button>
+                        <button class="btn-page">Next</button>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Add/Edit Vehicle Modal -->
+    <div id="vehicleModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Vehicle</h2>
+                <button class="btn-close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="vehicleForm" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="vehicleId">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="vehicleNumber">Vehicle Number *</label>
+                            <input type="text" id="vehicleNumber" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="brand">Brand *</label>
+                            <input type="text" id="brand" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="model">Model *</label>
+                            <input type="text" id="model" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="manufacturingYear">Manufacturing Year *</label>
+                            <input type="number" id="manufacturingYear" min="1990" max="2027" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="fuelType">Fuel Type *</label>
+                            <select id="fuelType" required>
+                                <option value="">Select...</option>
+                                <option value="DIESEL">Diesel</option>
+                                <option value="PETROL">Petrol</option>
+                                <option value="ELECTRIC">Electric</option>
+                                <option value="HYBRID">Hybrid</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="odometer">Odometer *</label>
+                            <input type="number" id="odometer" min="0" required>
+                        </div>
+                    </div>
+                    <div class="form-row single-col">
+                        <div class="input-group">
+                            <label for="status">Status *</label>
+                            <select id="status" required>
+                                <option value="">Select...</option>
+                                <option value="AVAILABLE">Available</option>
+                                <option value="IN_SERVICE">In Service</option>
+                                <option value="MAINTENANCE">Maintenance</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Vehicle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/vehicle.js"></script>
+</body>
+</html>

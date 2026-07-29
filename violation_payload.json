@@ -1,0 +1,9 @@
+{
+    "vehicleNumber": "NEW1234",
+    "brand": "TATA",
+    "model": "PRIMA",
+    "manufacturingYear": 2026,
+    "fuelType": "DIESEL",
+    "currentOdometer": 25000,
+    "status": "AVAILABLE"
+}

@@ -1,0 +1,27 @@
+/* Driver Specific Styles */
+
+/* Driver Status Badges */
+.status-onduty {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #10B981;
+}
+
+.status-offduty {
+    background-color: rgba(100, 116, 139, 0.1);
+    color: #64748B;
+}
+
+/* Vehicle Badge link styling */
+.vehicle-assigned {
+    background-color: rgba(0, 212, 255, 0.1);
+    color: #0A2540;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.vehicle-unassigned {
+    color: #94A3B8;
+    font-style: italic;
+}

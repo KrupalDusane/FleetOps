@@ -1,0 +1,35 @@
+/* Maintenance Specific Styles */
+
+/* Maintenance Status Badges */
+.status-scheduled {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #F59E0B; /* Amber */
+}
+
+.status-inprogress {
+    background-color: rgba(0, 212, 255, 0.1);
+    color: #0096B4; /* Deep Cyan */
+}
+
+.status-completed {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #10B981; /* Emerald */
+}
+
+.status-cancelled {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #EF4444; /* Red */
+}
+
+/* Number highlights */
+.money-text {
+    font-weight: 600;
+    color: #0A2540;
+}
+
+/* Make table columns properly aligned for numbers */
+.data-table th:nth-child(5),
+.data-table td:nth-child(5) {
+    text-align: right;
+    padding-right: 24px;
+}

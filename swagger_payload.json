@@ -1,0 +1,9 @@
+{
+    "vehicleNumber": "string",
+    "brand": "string",
+    "model": "string",
+    "manufacturingYear": 1990,
+    "fuelType": "DIESEL",
+    "currentOdometer": 0,
+    "status": "AVAILABLE"
+}

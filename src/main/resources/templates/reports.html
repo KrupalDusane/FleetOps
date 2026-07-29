@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports & Analytics - FleetOps</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/reports.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar (Reused) -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">🚚</div>
+                <h2>FleetOps</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="/dashboard"><span class="icon">📊</span> Dashboard</a></li>
+                    <li><a href="/vehicles"><span class="icon">🚛</span> Vehicles</a></li>
+                    <li><a href="/drivers"><span class="icon">👤</span> Drivers</a></li>
+                    <li><a href="/fuel"><span class="icon">💧</span> Fuel Logs</a></li>
+                    <li><a href="/maintenance"><span class="icon">🔧</span> Maintenance</a></li>
+                    <li><a href="/reports" class="active"><span class="icon">📈</span> Reports</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="/login" class="logout-link"><span class="icon">🚪</span> Logout</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Top Navbar (Reused) -->
+            <header class="topbar">
+                <div class="topbar-title">
+                    <h1>Reports & Analytics</h1>
+                </div>
+                <div class="topbar-info">
+                    <div class="current-date" id="currentDate">Loading date...</div>
+                    <div class="user-profile">
+                        <div class="avatar">JM</div>
+                        <div class="user-info">
+                            <span class="user-name">John Manager</span>
+                            <span class="user-role">Administrator</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Reports Content -->
+            <main class="content">
+                
+                <div id="loadingOverlay" class="loading-overlay active">
+                    <div class="spinner"></div>
+                    <p>Aggregating Fleet Data...</p>
+                </div>
+
+                <!-- KPI Stats Cards Row -->
+                <div class="stats-grid" id="reportsStatsGrid" style="display: none;">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-navy">🚚</div>
+                        <div class="stat-info">
+                            <h3>Total Vehicles</h3>
+                            <p id="kpiTotalVehicles">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-green">👤</div>
+                        <div class="stat-info">
+                            <h3>Active Drivers</h3>
+                            <p id="kpiActiveDrivers">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-amber">💧</div>
+                        <div class="stat-info">
+                            <h3>Total Fuel Spent</h3>
+                            <p id="kpiTotalFuel">$0.00</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-red">🔧</div>
+                        <div class="stat-info">
+                            <h3>Total Maint. Cost</h3>
+                            <p id="kpiTotalMaintenance">$0.00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-row" id="reportsChartsRow" style="display: none;">
+                    <div class="chart-container box-card">
+                        <h2>Vehicle Status Breakdown</h2>
+                        <div class="canvas-wrapper">
+                            <canvas id="vehicleStatusChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-container box-card">
+                        <h2>Fuel & Maintenance Cost Trend (YTD)</h2>
+                        <div class="canvas-wrapper">
+                            <canvas id="costTrendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Table -->
+                <div class="table-container box-card" id="reportsActivityRow" style="display: none; margin-top: 24px;">
+                    <h2 style="padding: 20px 20px 0;">Recent Fleet Activity</h2>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Module</th>
+                                <th>Description</th>
+                                <th>Cost Impact</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activityTableBody">
+                            <!-- Injected dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/reports.js"></script>
+</body>
+</html>

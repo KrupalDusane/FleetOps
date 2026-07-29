@@ -1,0 +1,342 @@
+/* Layout */
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    background-color: #F5F7FA;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #0A2540;
+    color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.sidebar-header {
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-header .logo-icon {
+    font-size: 24px;
+}
+
+.sidebar-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 20px 0;
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    color: #94A3B8;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.sidebar-nav a:hover {
+    color: #FFFFFF;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-nav a.active {
+    color: #00D4FF;
+    background-color: rgba(0, 212, 255, 0.05);
+    border-left: 4px solid #00D4FF;
+}
+
+.sidebar-nav .icon {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+}
+
+.sidebar-footer {
+    padding: 20px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #EF4444;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.logout-link:hover {
+    color: #FCA5A5;
+}
+
+/* Main Content */
+.main-wrapper {
+    flex: 1;
+    margin-left: 250px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Topbar */
+.topbar {
+    height: 70px;
+    background-color: #FFFFFF;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 32px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.topbar-title h1 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #0A2540;
+}
+
+.topbar-info {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.current-date {
+    font-size: 14px;
+    color: #64748B;
+    font-weight: 500;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    background-color: #0A2540;
+    color: #00D4FF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #0A2540;
+}
+
+.user-role {
+    font-size: 12px;
+    color: #64748B;
+}
+
+/* Content Area */
+.content {
+    padding: 32px;
+}
+
+/* Statistics Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.stat-card {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+/* Dynamic Colors for Cards */
+.bg-navy { background-color: rgba(10, 37, 64, 0.1); color: #0A2540; }
+.bg-green { background-color: rgba(16, 185, 129, 0.1); color: #10B981; }
+.bg-amber { background-color: rgba(245, 158, 11, 0.1); color: #F59E0B; }
+.bg-red { background-color: rgba(239, 68, 68, 0.1); color: #EF4444; }
+
+.stat-info h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748B;
+    margin-bottom: 4px;
+}
+
+.stat-info p {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0A2540;
+}
+
+/* Recent Vehicles Section */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #0A2540;
+}
+
+.btn-ghost {
+    color: #00D4FF;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.btn-ghost:hover {
+    background-color: rgba(0, 212, 255, 0.1);
+}
+
+/* Data Table */
+.table-container {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th, .data-table td {
+    padding: 16px 24px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.data-table th {
+    background-color: #F8FAFC;
+    color: #0A2540;
+    font-weight: 600;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.data-table td {
+    color: #334155;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.data-table tbody tr:hover {
+    background-color: #F8FAFC;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-available {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #10B981;
+}
+
+.status-inservice {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+}
+
+.status-maintenance {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #F59E0B;
+}
+
+/* Action Button */
+.btn-action {
+    background: none;
+    border: none;
+    color: #00D4FF;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.btn-action:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .sidebar { width: 80px; }
+    .sidebar-header h2, .sidebar-nav span:not(.icon), .user-info { display: none; }
+    .sidebar-nav a { justify-content: center; padding: 16px; }
+    .main-wrapper { margin-left: 80px; }
+    .logout-link span:not(.icon) { display: none; }
+    .logout-link { justify-content: center; }
+}
+
+@media (max-width: 768px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    .topbar-info { gap: 15px; }
+    .content { padding: 20px; }
+    .table-container { overflow-x: auto; }
+}

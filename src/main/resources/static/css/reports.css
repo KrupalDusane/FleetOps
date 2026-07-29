@@ -1,0 +1,82 @@
+/* Reports Specific Styles */
+
+.loading-overlay {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    color: #64748B;
+}
+
+.loading-overlay.active {
+    display: flex;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 212, 255, 0.1);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border-left-color: #00D4FF;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.box-card {
+    background: #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.box-card h2 {
+    font-size: 16px;
+    color: #0A2540;
+    margin-bottom: 16px;
+}
+
+.charts-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.chart-container {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+}
+
+.canvas-wrapper {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+@media (max-width: 1024px) {
+    .charts-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.money-text {
+    font-weight: 600;
+    color: #0A2540;
+}
+
+.module-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.module-fuel { background-color: rgba(0, 212, 255, 0.1); color: #0096B4; }
+.module-maint { background-color: rgba(239, 68, 68, 0.1); color: #EF4444; }
