@@ -119,7 +119,7 @@ function renderTable(pageData) {
         let statusLabel = '';
         if (vehicle.status === 'AVAILABLE') { statusClass = 'status-available'; statusLabel = 'Available'; }
         else if (vehicle.status === 'IN_SERVICE') { statusClass = 'status-inservice'; statusLabel = 'In Service'; }
-        else if (vehicle.status === 'MAINTENANCE') { statusClass = 'status-maintenance'; statusLabel = 'Maintenance'; }
+        else if (vehicle.status === 'UNDER_MAINTENANCE') { statusClass = 'status-maintenance'; statusLabel = 'Maintenance'; }
 
         const row = document.createElement('tr');
         row.innerHTML = `
