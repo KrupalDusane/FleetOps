@@ -13,8 +13,8 @@ import org.springframework.stereotype.Repository;
 public interface DriverRepository extends JpaRepository<Driver, Long> {
 
     @Query("SELECT d FROM Driver d WHERE " +
-           "(:search IS NULL OR LOWER(d.name) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
-           "LOWER(d.licenseNumber) LIKE LOWER(CONCAT('%', :search, '%'))) AND " +
-           "(:status IS NULL OR d.status = :status)")
+           "(cast(:search as string) IS NULL OR LOWER(d.name) LIKE LOWER(CONCAT('%', cast(:search as string), '%')) OR " +
+           "LOWER(d.licenseNumber) LIKE LOWER(CONCAT('%', cast(:search as string), '%'))) AND " +
+           "(cast(:status as string) IS NULL OR d.status = :status)")
     Page<Driver> searchAndFilterDrivers(@Param("search") String search, @Param("status") DriverStatus status, Pageable pageable);
 }

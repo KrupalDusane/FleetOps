@@ -11,6 +11,11 @@ const Api = {
      * Centralized response handler
      */
     async handleResponse(response) {
+        if (response.status === 401) {
+            window.location.href = '/login?expired=true';
+            return null;
+        }
+
         if (!response.ok) {
             let errorMessage = 'An unexpected error occurred';
             try {
@@ -43,6 +48,8 @@ const Api = {
     async fetchWithTimeout(url, options = {}, timeoutMs = 10000) {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+        options.credentials = 'same-origin';
+        
         try {
             const response = await fetch(url, { ...options, signal: controller.signal });
             clearTimeout(timeoutId);

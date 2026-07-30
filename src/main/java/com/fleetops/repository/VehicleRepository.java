@@ -14,10 +14,10 @@ import com.fleetops.entity.VehicleStatus;
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 
     @Query("SELECT v FROM Vehicle v WHERE " +
-           "(:search IS NULL OR LOWER(v.vehicleNumber) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
-           "LOWER(v.brand) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
-           "LOWER(v.model) LIKE LOWER(CONCAT('%', :search, '%'))) AND " +
-           "(:status IS NULL OR v.status = :status)")
+           "(cast(:search as string) IS NULL OR LOWER(v.vehicleNumber) LIKE LOWER(CONCAT('%', cast(:search as string), '%')) OR " +
+           "LOWER(v.brand) LIKE LOWER(CONCAT('%', cast(:search as string), '%')) OR " +
+           "LOWER(v.model) LIKE LOWER(CONCAT('%', cast(:search as string), '%'))) AND " +
+           "(cast(:status as string) IS NULL OR v.status = :status)")
     Page<Vehicle> searchAndFilterVehicles(@Param("search") String search, @Param("status") VehicleStatus status, Pageable pageable);
 
     long countByStatus(VehicleStatus status);

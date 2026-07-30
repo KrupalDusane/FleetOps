@@ -60,3 +60,6 @@ Thumbs.db
 !package.json
 cookie.txt
 *.ps1
+
+# Local Database
+mysql-data/

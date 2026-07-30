@@ -214,7 +214,7 @@ async function openAddModal() {
     form.reset();
     document.getElementById('fuelLogId').value = '';
     currentFuelLogId = null;
-    document.getElementById('totalCostDisplay').textContent = '$0.00';
+    document.getElementById('totalCostDisplay').textContent = '₹0.00';
     
     // Default to today
     document.getElementById('fuelDate').value = new Date().toISOString().split('T')[0];

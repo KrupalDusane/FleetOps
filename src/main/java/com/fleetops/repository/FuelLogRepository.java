@@ -15,6 +15,6 @@ public interface FuelLogRepository extends JpaRepository<FuelLog, Long> {
 
     @Query("SELECT f FROM FuelLog f WHERE " +
            "(:vehicleId IS NULL OR f.vehicle.id = :vehicleId) AND " +
-           "(:fuelDate IS NULL OR f.fuelDate = :fuelDate)")
+           "(cast(:fuelDate as date) IS NULL OR f.fuelDate = :fuelDate)")
     Page<FuelLog> searchAndFilterFuelLogs(@Param("vehicleId") Long vehicleId, @Param("fuelDate") LocalDate fuelDate, Pageable pageable);
 }

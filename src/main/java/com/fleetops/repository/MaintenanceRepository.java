@@ -14,8 +14,8 @@ public interface MaintenanceRepository extends JpaRepository<Maintenance, Long> 
 
     @Query("SELECT m FROM Maintenance m WHERE " +
            "(:vehicleId IS NULL OR m.vehicle.id = :vehicleId) AND " +
-           "(:garage IS NULL OR LOWER(m.garage) LIKE LOWER(CONCAT('%', :garage, '%'))) AND " +
-           "(:status IS NULL OR m.status = :status)")
+           "(cast(:garage as string) IS NULL OR LOWER(m.garage) LIKE LOWER(CONCAT('%', cast(:garage as string), '%'))) AND " +
+           "(cast(:status as string) IS NULL OR m.status = :status)")
     Page<Maintenance> searchAndFilterMaintenance(
             @Param("vehicleId") Long vehicleId, 
             @Param("garage") String garage, 
