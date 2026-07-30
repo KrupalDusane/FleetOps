@@ -19,4 +19,8 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
            "LOWER(v.model) LIKE LOWER(CONCAT('%', :search, '%'))) AND " +
            "(:status IS NULL OR v.status = :status)")
     Page<Vehicle> searchAndFilterVehicles(@Param("search") String search, @Param("status") VehicleStatus status, Pageable pageable);
+
+    long countByStatus(VehicleStatus status);
+
+    java.util.List<Vehicle> findTop5ByOrderByIdDesc();
 }
