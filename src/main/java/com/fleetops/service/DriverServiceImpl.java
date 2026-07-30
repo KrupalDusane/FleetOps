@@ -25,6 +25,7 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public Driver createDriver(Driver driver) {
+        driver.setId(null);
         if (driver.getCurrentVehicle() != null && driver.getCurrentVehicle().getId() != null) {
             Vehicle vehicle = vehicleRepository.findById(driver.getCurrentVehicle().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found with id: " + driver.getCurrentVehicle().getId()));

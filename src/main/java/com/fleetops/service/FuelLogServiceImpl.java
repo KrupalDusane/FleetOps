@@ -41,6 +41,7 @@ public class FuelLogServiceImpl implements FuelLogService {
 
     @Override
     public FuelLog createFuelLog(FuelLog fuelLog) {
+        fuelLog.setId(null);
         validateAndSetVehicle(fuelLog);
         calculateTotalCost(fuelLog);
         return fuelLogRepository.save(fuelLog);

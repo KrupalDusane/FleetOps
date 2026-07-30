@@ -18,6 +18,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle createVehicle(Vehicle vehicle) {
+        vehicle.setId(null);
         return vehicleRepository.save(vehicle);
     }
 

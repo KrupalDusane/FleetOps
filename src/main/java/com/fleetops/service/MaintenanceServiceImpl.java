@@ -42,6 +42,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 
     @Override
     public Maintenance createMaintenance(Maintenance maintenance) {
+        maintenance.setId(null);
         validateAndSetVehicle(maintenance);
         validateDates(maintenance);
         return maintenanceRepository.save(maintenance);
