@@ -66,14 +66,22 @@ async function fetchFuelLogs(page = 0) {
     
     const dateFilter = document.getElementById('dateFilter').value;
     const vehicleFilter = document.getElementById('vehicleFilter').value;
+    const minCostFilter = document.getElementById('minCostFilter')?.value;
+    const maxCostFilter = document.getElementById('maxCostFilter')?.value;
+    const minQtyFilter = document.getElementById('minQtyFilter')?.value;
+    const maxQtyFilter = document.getElementById('maxQtyFilter')?.value;
     
     const params = { page: currentPage, size: pageSize, sort: currentSort };
     let endpoint = '/fuel-logs';
     
-    if (dateFilter || vehicleFilter) {
+    if (dateFilter || vehicleFilter || minCostFilter || maxCostFilter || minQtyFilter || maxQtyFilter) {
         endpoint = '/fuel-logs/search';
         if (dateFilter) params.fuelDate = dateFilter;
         if (vehicleFilter) params.vehicleId = vehicleFilter;
+        if (minCostFilter) params.minCost = minCostFilter;
+        if (maxCostFilter) params.maxCost = maxCostFilter;
+        if (minQtyFilter) params.minQty = minQtyFilter;
+        if (maxQtyFilter) params.maxQty = maxQtyFilter;
     }
 
     try {
@@ -174,7 +182,19 @@ function filterFuelLogs() {
 function clearFilters() {
     document.getElementById('dateFilter').value = '';
     document.getElementById('vehicleFilter').value = '';
+    if (document.getElementById('minCostFilter')) document.getElementById('minCostFilter').value = '';
+    if (document.getElementById('maxCostFilter')) document.getElementById('maxCostFilter').value = '';
+    if (document.getElementById('minQtyFilter')) document.getElementById('minQtyFilter').value = '';
+    if (document.getElementById('maxQtyFilter')) document.getElementById('maxQtyFilter').value = '';
     fetchFuelLogs(0);
+}
+
+let filterTimeout;
+function delayFilter() {
+    clearTimeout(filterTimeout);
+    filterTimeout = setTimeout(() => {
+        fetchFuelLogs(0);
+    }, 500);
 }
 
 /* Modal Logic */

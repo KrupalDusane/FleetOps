@@ -18,6 +18,11 @@ public interface FuelLogService {
     FuelLog updateFuelLog(Long id, FuelLog fuelLog);
 
     void deleteFuelLog(Long id);
+    void restoreFuelLog(Long id);
 
     Page<FuelLog> searchAndFilterFuelLogs(Long vehicleId, LocalDate fuelDate, Pageable pageable);
+    
+    Page<FuelLog> searchWithAdvancedFilters(Long vehicleId, LocalDate fuelDate, Double minCost, Double maxCost, Double minQty, Double maxQty, Pageable pageable);
+    
+    Page<FuelLog> getDeletedFuelLogs(Pageable pageable);
 }

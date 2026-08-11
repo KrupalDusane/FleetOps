@@ -18,6 +18,8 @@ public interface DriverService {
     Driver updateDriver(Long id, Driver driver);
 
     void deleteDriver(Long id);
+    void restoreDriver(Long id);
 
-    Page<Driver> searchAndFilterDrivers(String search, DriverStatus status, Pageable pageable);
+    org.springframework.data.domain.Page<Driver> searchAndFilterDrivers(String search, com.fleetops.entity.DriverStatus status, org.springframework.data.domain.Pageable pageable);
+    org.springframework.data.domain.Page<Driver> getDeletedDrivers(org.springframework.data.domain.Pageable pageable);
 }

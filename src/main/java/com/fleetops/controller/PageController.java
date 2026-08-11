@@ -45,4 +45,25 @@ public class PageController {
     public String reports() {
         return "reports";
     }
+
+    @GetMapping("/audit")
+    public String auditLogs() {
+        return "audit";
+    }
+
+
+    @GetMapping("/deleted-records")
+    public String deletedRecords() {
+        return "deleted-records";
+    }
+
+    @GetMapping("/vehicle-documents")
+    public String vehicleDocuments() {
+        return "vehicle-documents";
+    }
+
+    @GetMapping("/reminders")
+    public String reminders() {
+        return "reminders";
+    }
 }

@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Logs - FleetOps</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .json-viewer {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+        }
+        .diff-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .details-row {
+            display: none;
+            background-color: #fcfcfc;
+        }
+        .details-row.active {
+            display: table-row;
+        }
+        .details-cell {
+            padding: 15px !important;
+            border-top: none !important;
+        }
+        .expand-btn {
+            background: none;
+            border: none;
+            color: #3b82f6;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .expand-btn:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">ðŸšš</div>
+                <h2>FleetOps</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="/dashboard"><span class="icon">ðŸ“Š</span> Dashboard</a></li>
+                    <li><a href="/vehicles"><span class="icon">ðŸš›</span> Vehicles</a></li>
+                    <li><a href="/drivers"><span class="icon">ðŸ‘¤</span> Drivers</a></li>
+                    <li><a href="/fuel"><span class="icon">ðŸ’§</span> Fuel Logs</a></li>
+                    <li><a href="/maintenance"><span class="icon">ðŸ”§</span> Maintenance</a></li>
+                    <li><a href="/reports"><span class="icon">ðŸ“ˆ</span> Reports</a></li>
+                    <li><a href="/deleted-records"><span class="icon">ðŸ—‘ï¸</span> Recycle Bin</a></li>
+                    <li><a href="/audit" class="active"><span class="icon">ðŸ”</span> Audit Logs</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="/login" class="logout-link"><span class="icon">ðŸšª</span> Logout</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Top Navbar -->
+            <header class="topbar">
+                <div class="topbar-title">
+                    <h1>Enterprise Audit Logs</h1>
+                </div>
+                <div class="topbar-info">
+                    <div class="current-date" id="currentDate">Loading date...</div>
+                    <div class="user-profile">
+                        <div class="avatar">AD</div>
+                        <div class="user-info">
+                            <span class="user-name">Admin</span>
+                            <span class="user-role">Administrator</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="content">
+                <section class="data-section">
+                    <div class="section-header">
+                        <h2>Audit Trail</h2>
+                    </div>
+
+                    <div class="controls-bar">
+                        <div class="search-box">
+                            <input type="text" id="searchInput" placeholder="Search by user or action...">
+                            <button id="searchBtn" class="btn-primary">Search</button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>User</th>
+                                    <th>Action</th>
+                                    <th>Entity</th>
+                                    <th>Description</th>
+                                    <th>Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="auditTableBody">
+                                <!-- Rows injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="pagination" id="paginationControls">
+                        <!-- Pagination injected by JS -->
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/audit.js"></script>
+    <script>
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    </script>
+</body>
+</html>
+

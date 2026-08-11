@@ -12,9 +12,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "maintenance_logs")
+@Table(name = "maintenance_logs", indexes = {
+    @Index(name = "idx_maint_deleted", columnList = "is_deleted"),
+    @Index(name = "idx_maint_deleted_at", columnList = "deleted_at")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -50,7 +54,17 @@ public class Maintenance {
     private MaintenanceStatus status;
 
     @NotNull(message = "Vehicle cannot be null")
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "vehicle_id", nullable = false)
     private Vehicle vehicle;
+
+    @Builder.Default
+    @Column(name = "is_deleted", nullable = false)
+    private boolean deleted = false;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    @Column(name = "deleted_by")
+    private String deletedBy;
 }

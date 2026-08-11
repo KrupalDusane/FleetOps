@@ -11,9 +11,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "vehicles")
+@Table(name = "vehicles", indexes = {
+    @Index(name = "idx_vehicle_deleted", columnList = "is_deleted"),
+    @Index(name = "idx_vehicle_deleted_at", columnList = "deleted_at")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -60,4 +64,14 @@ public class Vehicle {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private VehicleStatus status;
+
+    @Builder.Default
+    @Column(name = "is_deleted", nullable = false)
+    private boolean deleted = false;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    @Column(name = "deleted_by")
+    private String deletedBy;
 }

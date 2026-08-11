@@ -11,6 +11,7 @@ erDiagram
     VEHICLES ||--o{ DRIVERS : "is assigned to"
     VEHICLES ||--o{ FUEL_LOGS : "has"
     VEHICLES ||--o{ MAINTENANCE_LOGS : "requires"
+    VEHICLES ||--o{ VEHICLE_DOCUMENTS : "owns"
 
     VEHICLES {
         bigint id PK
@@ -51,6 +52,22 @@ erDiagram
         varchar(255) status "Enum: SCHEDULED, COMPLETED"
         bigint vehicle_id FK "Not Null"
     }
+
+    VEHICLE_DOCUMENTS {
+        bigint id PK
+        varchar(255) document_type "Enum: RC, INSURANCE, PUC..."
+        varchar(100) document_number
+        varchar(255) original_file_name
+        varchar(255) stored_file_name
+        varchar(255) storage_path
+        varchar(100) mime_type
+        bigint file_size
+        varchar(64) checksum
+        date issue_date
+        date expiry_date
+        boolean archived
+        bigint vehicle_id FK "Not Null"
+    }
 ```
 
 ---
@@ -82,6 +99,13 @@ Tracks the service history and preventive maintenance scheduling for vehicles.
 - **Primary Key**: `id`
 - **Constraints**: `next_service_date` must logically occur *after* the `service_date` (enforced via Business Logic in `MaintenanceServiceImpl`).
 - **Foreign Keys**: `vehicle_id` references `vehicles(id)`. Required relationship.
+
+### 5. `vehicle_documents`
+Centralized document lifecycle management for vehicles.
+- **Primary Key**: `id`
+- **Constraints**: `issue_date` must occur before `expiry_date`. Checksum helps detect duplicate files.
+- **Foreign Keys**: `vehicle_id` references `vehicles(id)`. Required relationship.
+- **Features**: Explicit versioning (ACTIVE vs ARCHIVED). Soft delete supported. Dynamic status calculated off `expiry_date`.
 
 ---
 

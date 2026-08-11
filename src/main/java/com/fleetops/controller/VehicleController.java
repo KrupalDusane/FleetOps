@@ -26,14 +26,14 @@ public class VehicleController {
     @Operation(summary = "Create a new vehicle", description = "Adds a new vehicle to the database")
     public ResponseEntity<Vehicle> createVehicle(@Valid @RequestBody Vehicle vehicle) {
         Vehicle savedVehicle = vehicleService.createVehicle(vehicle);
-        return new ResponseEntity<>(savedVehicle, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedVehicle);
     }
 
     @GetMapping
     @Operation(summary = "Get all vehicles", description = "Retrieves a list of all vehicles")
     public ResponseEntity<List<Vehicle>> getAllVehicles() {
         List<Vehicle> vehicles = vehicleService.getAllVehicles();
-        return new ResponseEntity<>(vehicles, HttpStatus.OK);
+        return ResponseEntity.ok(vehicles);
     }
 
     @GetMapping("/search")
@@ -43,27 +43,27 @@ public class VehicleController {
             @RequestParam(required = false) com.fleetops.entity.VehicleStatus status,
             @org.springframework.data.web.PageableDefault(size = 10, sort = "id") org.springframework.data.domain.Pageable pageable) {
         org.springframework.data.domain.Page<Vehicle> vehiclesPage = vehicleService.searchAndFilterVehicles(search, status, pageable);
-        return new ResponseEntity<>(vehiclesPage, HttpStatus.OK);
+        return ResponseEntity.ok(vehiclesPage);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get a vehicle by ID", description = "Fetches details of a specific vehicle by its ID")
     public ResponseEntity<Vehicle> getVehicleById(@PathVariable Long id) {
         Vehicle vehicle = vehicleService.getVehicleById(id);
-        return new ResponseEntity<>(vehicle, HttpStatus.OK);
+        return ResponseEntity.ok(vehicle);
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update a vehicle", description = "Updates an existing vehicle's information")
     public ResponseEntity<Vehicle> updateVehicle(@PathVariable Long id, @Valid @RequestBody Vehicle vehicleDetails) {
         Vehicle updatedVehicle = vehicleService.updateVehicle(id, vehicleDetails);
-        return new ResponseEntity<>(updatedVehicle, HttpStatus.OK);
+        return ResponseEntity.ok(updatedVehicle);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a vehicle", description = "Removes a vehicle from the system by its ID")
     public ResponseEntity<Void> deleteVehicle(@PathVariable Long id) {
         vehicleService.deleteVehicle(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }
