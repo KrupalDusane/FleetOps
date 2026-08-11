@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reminders - FleetOps</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/vehicle.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar (Reused) -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">🚚</div>
+                <h2>FleetOps</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="/dashboard"><span class="icon">📊</span> Dashboard</a></li>
+                    <li><a href="/vehicles"><span class="icon">🚛</span> Vehicles</a></li>
+                    <li><a href="/vehicle-documents"><span class="icon">📁</span> Documents</a></li>
+                    <li><a href="/reminders" class="active"><span class="icon">🔔</span> Reminders</a></li>
+                    <li><a href="/drivers"><span class="icon">👤</span> Drivers</a></li>
+                    <li><a href="/fuel"><span class="icon">💧</span> Fuel Logs</a></li>
+                    <li><a href="/maintenance"><span class="icon">🔧</span> Maintenance</a></li>
+                    <li><a href="/reports"><span class="icon">📈</span> Reports</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="/login" class="logout-link"><span class="icon">🚪</span> Logout</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Top Navbar (Reused) -->
+            <header class="topbar">
+                <div class="topbar-title">
+                    <h1>Maintenance & Reminders</h1>
+                </div>
+                <div class="topbar-info">
+                    <div class="current-date" id="currentDate">Loading date...</div>
+                    <div class="user-profile">
+                        <div class="avatar">JM</div>
+                        <div class="user-info">
+                            <span class="user-name">John Manager</span>
+                            <span class="user-role">Administrator</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="content">
+                <!-- Summary Widgets -->
+                <section class="stats-grid" id="reminderStatsGrid" style="margin-bottom: 20px;">
+                    <!-- Injected by JS -->
+                </section>
+                
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <div class="toolbar-left">
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="searchInput" placeholder="Search vehicle number..." onkeyup="searchReminders()">
+                        </div>
+                        <div class="filter-box">
+                            <select id="priorityFilter" onchange="filterReminders()">
+                                <option value="">All Priorities</option>
+                                <option value="CRITICAL">Critical</option>
+                                <option value="HIGH">High</option>
+                                <option value="MEDIUM">Medium</option>
+                                <option value="LOW">Low</option>
+                            </select>
+                            <select id="typeFilter" onchange="filterReminders()">
+                                <option value="">All Types</option>
+                                <option value="MAINTENANCE">Maintenance</option>
+                                <option value="DOCUMENT">Document</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reminders Table -->
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Vehicle Number</th>
+                                <th>Type</th>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Due Date</th>
+                                <th>Priority</th>
+                            </tr>
+                        </thead>
+                        <tbody id="remindersTableBody">
+                            <!-- Rows injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Controls -->
+                <div class="pagination">
+                    <span class="page-info">Showing 1 to 10 of ...</span>
+                    <div class="page-buttons" id="paginationControls">
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="/js/api.js?v=4"></script>
+    <script src="/js/reminders.js?v=4"></script>
+</body>
+</html>

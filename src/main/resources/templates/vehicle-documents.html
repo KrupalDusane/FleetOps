@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Management - FleetOps</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/vehicle.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar (Reused) -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">🚚</div>
+                <h2>FleetOps</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="/dashboard"><span class="icon">📊</span> Dashboard</a></li>
+                    <li><a href="/vehicles" class="active"><span class="icon">🚛</span> Vehicles</a></li>
+                    <li><a href="/vehicle-documents"><span class="icon">📁</span> Documents</a></li>
+                    <li><a href="/drivers"><span class="icon">👤</span> Drivers</a></li>
+                    <li><a href="/fuel"><span class="icon">💧</span> Fuel Logs</a></li>
+                    <li><a href="/maintenance"><span class="icon">🔧</span> Maintenance</a></li>
+                    <li><a href="/reports"><span class="icon">📈</span> Reports</a></li>
+                    <li><a href="/deleted-records"><span class="icon">🗑️</span> Recycle Bin</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="/login" class="logout-link"><span class="icon">🚪</span> Logout</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Top Navbar (Reused) -->
+            <header class="topbar">
+                <div class="topbar-title">
+                    <h1>Vehicle Documents</h1>
+                </div>
+                <div class="topbar-info">
+                    <div class="current-date" id="currentDate">Loading date...</div>
+                    <div class="user-profile">
+                        <div class="avatar">JM</div>
+                        <div class="user-info">
+                            <span class="user-name">John Manager</span>
+                            <span class="user-role">Administrator</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Document Content -->
+            <main class="content">
+                
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <div class="toolbar-left">
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="searchInput" placeholder="Search by Vehicle ID..." onkeyup="searchDocuments()">
+                        </div>
+                        <div class="filter-box">
+                            <select id="typeFilter" onchange="filterDocuments()">
+                                <option value="">All Types</option>
+                                <option value="RC">RC</option>
+                                <option value="INSURANCE">Insurance</option>
+                                <option value="PUC">PUC</option>
+                                <option value="FITNESS_CERTIFICATE">Fitness Certificate</option>
+                                <option value="NATIONAL_PERMIT">National Permit</option>
+                                <option value="ROAD_TAX">Road Tax</option>
+                            </select>
+                            <select id="statusFilter" onchange="filterDocuments()">
+                                <option value="">All Statuses</option>
+                                <option value="VALID">Valid</option>
+                                <option value="EXPIRING_SOON">Expiring Soon</option>
+                                <option value="EXPIRED">Expired</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="toolbar-right">
+                        <button class="btn-primary" onclick="openAddModal()">+ Upload Document</button>
+                    </div>
+                </div>
+
+                <!-- Documents Table -->
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Vehicle</th>
+                                <th>Type</th>
+                                <th>Document No</th>
+                                <th>Issue Date</th>
+                                <th>Expiry Date</th>
+                                <th>Status</th>
+                                <th>Upload Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="documentsTableBody">
+                            <!-- Rows injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Controls -->
+                <div class="pagination">
+                    <span class="page-info">Showing 1 to 10 of ...</span>
+                    <div class="page-buttons" id="paginationControls">
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Upload Document Modal -->
+    <div id="documentModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2 id="modalTitle">Upload Document</h2>
+                <button class="btn-close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="documentForm" onsubmit="handleFormSubmit(event)" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="vehicleId">Vehicle ID *</label>
+                            <input type="number" id="vehicleId" name="vehicleId" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="documentType">Document Type *</label>
+                            <select id="documentType" name="documentType" required>
+                                <option value="">Select...</option>
+                                <option value="RC">RC</option>
+                                <option value="INSURANCE">Insurance</option>
+                                <option value="PUC">PUC</option>
+                                <option value="FITNESS_CERTIFICATE">Fitness Certificate</option>
+                                <option value="NATIONAL_PERMIT">National Permit</option>
+                                <option value="ROAD_TAX">Road Tax</option>
+                                <option value="POLLUTION_CERTIFICATE">Pollution Certificate</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="documentNumber">Document Number</label>
+                            <input type="text" id="documentNumber" name="documentNumber">
+                        </div>
+                        <div class="input-group">
+                            <label for="file">File (PDF, JPG, PNG) *</label>
+                            <input type="file" id="file" name="file" accept=".pdf,.jpg,.jpeg,.png" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="issueDate">Issue Date</label>
+                            <input type="date" id="issueDate" name="issueDate">
+                        </div>
+                        <div class="input-group">
+                            <label for="expiryDate">Expiry Date *</label>
+                            <input type="date" id="expiryDate" name="expiryDate" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/api.js?v=3"></script>
+    <script src="/js/vehicle-documents.js?v=3"></script>
+</body>
+</html>

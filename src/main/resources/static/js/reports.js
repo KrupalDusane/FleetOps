@@ -1,215 +1,146 @@
-/**
- * Reports & Analytics JavaScript
- * Fetches data across all modules to build a unified frontend dashboard.
- */
-
 document.addEventListener('DOMContentLoaded', async () => {
-    // Set Current Date
-    const dateElement = document.getElementById('currentDate');
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    dateElement.textContent = new Date().toLocaleDateString('en-US', options);
+    // Populate username
+    const username = localStorage.getItem('fleetops_username');
+    if (username) {
+        document.getElementById('currentUser').textContent = `User: ${username}`;
+    } else {
+        window.location.href = '/login';
+    }
 
-    await loadReportData();
+    // Populate dropdowns
+    await populateDropdowns();
+    toggleFilters();
 });
 
-function formatCurrency(amount) {
-    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(amount || 0);
-}
-
-function formatDate(dateString) {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-}
-
-async function loadReportData() {
+async function populateDropdowns() {
     try {
-        // Fetch max 1000 records from each module to build stats purely on frontend
-        // Using Promise.all for concurrent fetching
-        const [vehiclesRes, driversRes, fuelRes, maintRes] = await Promise.all([
-            Api.get('/vehicles', { size: 1000 }),
-            Api.get('/drivers', { size: 1000 }),
-            Api.get('/fuel-logs', { size: 1000 }),
-            Api.get('/maintenance', { size: 1000 })
-        ]);
+        // Vehicles
+        const vData = await Api.get('/vehicles', { size: 500 });
+        const vehicles = Array.isArray(vData) ? vData : (vData.content || []);
+        const vSelect = document.getElementById('vehicleId');
+        vehicles.forEach(v => {
+            const opt = document.createElement('option');
+            opt.value = v.id;
+            opt.textContent = `${v.vehicleNumber} (${v.brand})`;
+            vSelect.appendChild(opt);
+        });
 
-        // Normalize paginated data vs array data
-        const vehicles = Array.isArray(vehiclesRes) ? vehiclesRes : (vehiclesRes.content || []);
-        const drivers = Array.isArray(driversRes) ? driversRes : (driversRes.content || []);
-        const fuelLogs = Array.isArray(fuelRes) ? fuelRes : (fuelRes.content || []);
-        const maintLogs = Array.isArray(maintRes) ? maintRes : (maintRes.content || []);
-
-        hideLoading();
-        buildCards(vehicles, drivers, fuelLogs, maintLogs);
-        buildCharts(vehicles, fuelLogs, maintLogs);
-        buildActivityTable(fuelLogs, maintLogs);
-
-    } catch (error) {
-        document.getElementById('loadingOverlay').innerHTML = `
-            <div style="color: #EF4444; text-align: center;">
-                <h3>Error Loading Dashboard Data</h3>
-                <p>${error.message}</p>
-            </div>
-        `;
+        // Drivers
+        const dData = await Api.get('/drivers', { size: 500 });
+        const drivers = Array.isArray(dData) ? dData : (dData.content || []);
+        const dSelect = document.getElementById('driverId');
+        drivers.forEach(d => {
+            const opt = document.createElement('option');
+            opt.value = d.id;
+            opt.textContent = `${d.firstName} ${d.lastName}`;
+            dSelect.appendChild(opt);
+        });
+    } catch (e) {
+        console.error("Error populating dropdowns", e);
     }
 }
 
-function hideLoading() {
-    document.getElementById('loadingOverlay').classList.remove('active');
-    document.getElementById('reportsStatsGrid').style.display = 'grid';
-    document.getElementById('reportsChartsRow').style.display = 'grid';
-    document.getElementById('reportsActivityRow').style.display = 'block';
+function toggleFilters() {
+    const reportType = document.getElementById('reportType').value;
+    
+    // Hide all first
+    document.getElementById('vehicleFilterGroup').style.display = 'none';
+    document.getElementById('driverFilterGroup').style.display = 'none';
+    document.getElementById('statusFilterGroup').style.display = 'none';
+    document.getElementById('dateFilterGroup').style.display = 'none';
+
+    if (reportType === 'VEHICLE') {
+        document.getElementById('vehicleFilterGroup').style.display = 'block';
+        document.getElementById('statusFilterGroup').style.display = 'block';
+    } else if (reportType === 'DRIVER') {
+        document.getElementById('driverFilterGroup').style.display = 'block';
+        document.getElementById('statusFilterGroup').style.display = 'block';
+    } else if (reportType === 'FUEL' || reportType === 'MAINTENANCE') {
+        document.getElementById('vehicleFilterGroup').style.display = 'block';
+        document.getElementById('dateFilterGroup').style.display = 'flex';
+        if (reportType === 'MAINTENANCE') {
+            document.getElementById('statusFilterGroup').style.display = 'block';
+        }
+    } else if (reportType === 'FLEET_HEALTH') {
+        // No filters for global fleet health snapshot
+    }
 }
 
-function buildCards(vehicles, drivers, fuelLogs, maintLogs) {
-    // Total Vehicles
-    document.getElementById('kpiTotalVehicles').textContent = vehicles.length;
+function generateReport(format) {
+    const msg = document.getElementById('reportMessage');
+    msg.style.display = 'none';
+
+    const reportType = document.getElementById('reportType').value;
     
-    // Active Drivers (ON_DUTY)
-    const activeDrivers = drivers.filter(d => d.status === 'ON_DUTY').length;
-    document.getElementById('kpiActiveDrivers').textContent = activeDrivers;
+    // Collect parameters
+    const params = new URLSearchParams();
+    params.append('reportType', reportType);
+    params.append('format', format);
+
+    if (reportType === 'VEHICLE' || reportType === 'FUEL' || reportType === 'MAINTENANCE') {
+        const vid = document.getElementById('vehicleId').value;
+        if (vid) params.append('vehicleId', vid);
+    }
     
-    // Total Fuel
-    const totalFuel = fuelLogs.reduce((sum, log) => sum + (log.totalCost || 0), 0);
-    document.getElementById('kpiTotalFuel').textContent = formatCurrency(totalFuel);
+    if (reportType === 'DRIVER') {
+        const did = document.getElementById('driverId').value;
+        if (did) params.append('driverId', did);
+    }
     
-    // Total Maintenance
-    const totalMaint = maintLogs.reduce((sum, log) => sum + (log.cost || 0), 0);
-    document.getElementById('kpiTotalMaintenance').textContent = formatCurrency(totalMaint);
-}
-
-function buildCharts(vehicles, fuelLogs, maintLogs) {
-    // 1. Vehicle Status Doughnut Chart
-    const statusCounts = { 'AVAILABLE': 0, 'IN_SERVICE': 0, 'MAINTENANCE': 0 };
-    vehicles.forEach(v => {
-        if (statusCounts[v.status] !== undefined) {
-            statusCounts[v.status]++;
-        }
-    });
-
-    const ctxStatus = document.getElementById('vehicleStatusChart').getContext('2d');
-    new Chart(ctxStatus, {
-        type: 'doughnut',
-        data: {
-            labels: ['Available', 'In Service', 'Maintenance'],
-            datasets: [{
-                data: [statusCounts['AVAILABLE'], statusCounts['IN_SERVICE'], statusCounts['MAINTENANCE']],
-                backgroundColor: ['#10B981', '#00D4FF', '#F59E0B'],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'bottom' }
-            }
-        }
-    });
-
-    // 2. Trend Bar Chart (Aggregating costs by month for current year)
-    const currentYear = new Date().getFullYear();
-    const monthlyFuel = new Array(12).fill(0);
-    const monthlyMaint = new Array(12).fill(0);
-
-    fuelLogs.forEach(log => {
-        if (!log.fuelDate) return;
-        const d = new Date(log.fuelDate);
-        if (d.getFullYear() === currentYear) {
-            monthlyFuel[d.getMonth()] += (log.totalCost || 0);
-        }
-    });
-
-    maintLogs.forEach(log => {
-        if (!log.serviceDate) return;
-        const d = new Date(log.serviceDate);
-        if (d.getFullYear() === currentYear) {
-            monthlyMaint[d.getMonth()] += (log.cost || 0);
-        }
-    });
-
-    const ctxTrend = document.getElementById('costTrendChart').getContext('2d');
-    new Chart(ctxTrend, {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [
-                {
-                    label: 'Fuel Cost',
-                    data: monthlyFuel,
-                    backgroundColor: 'rgba(0, 212, 255, 0.7)',
-                    borderRadius: 4
-                },
-                {
-                    label: 'Maintenance Cost',
-                    data: monthlyMaint,
-                    backgroundColor: 'rgba(239, 68, 68, 0.7)',
-                    borderRadius: 4
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) { return '$' + value; }
-                    }
-                }
-            },
-            plugins: {
-                legend: { position: 'top' }
-            }
-        }
-    });
-}
-
-function buildActivityTable(fuelLogs, maintLogs) {
-    const tableBody = document.getElementById('activityTableBody');
-    tableBody.innerHTML = '';
-
-    // Normalize and combine arrays
-    const combined = [];
-    fuelLogs.forEach(log => {
-        combined.push({
-            date: new Date(log.fuelDate),
-            module: 'FUEL',
-            desc: `Refueled ${log.vehicle ? log.vehicle.vehicleNumber : 'Vehicle'} (${log.fuelQuantity}L)`,
-            cost: log.totalCost || 0
-        });
-    });
-
-    maintLogs.forEach(log => {
-        combined.push({
-            date: new Date(log.serviceDate),
-            module: 'MAINTENANCE',
-            desc: `Service at ${log.garage} for ${log.vehicle ? log.vehicle.vehicleNumber : 'Vehicle'}`,
-            cost: log.cost || 0
-        });
-    });
-
-    // Sort descending by date
-    combined.sort((a, b) => b.date - a.date);
-
-    // Take top 5
-    const recent = combined.slice(0, 5);
-
-    if (recent.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:#64748B;">No recent activity found.</td></tr>`;
-        return;
+    if (reportType === 'VEHICLE' || reportType === 'DRIVER' || reportType === 'MAINTENANCE') {
+        const status = document.getElementById('status').value;
+        if (status) params.append('status', status);
+    }
+    
+    if (reportType === 'FUEL' || reportType === 'MAINTENANCE') {
+        const sd = document.getElementById('startDate').value;
+        const ed = document.getElementById('endDate').value;
+        if (sd) params.append('startDate', sd);
+        if (ed) params.append('endDate', ed);
     }
 
-    recent.forEach(act => {
-        const badgeClass = act.module === 'FUEL' ? 'module-fuel' : 'module-maint';
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${formatDate(act.date)}</td>
-            <td><span class="module-badge ${badgeClass}">${act.module}</span></td>
-            <td>${act.desc}</td>
-            <td class="money-text">${formatCurrency(act.cost)}</td>
-        `;
-        tableBody.appendChild(row);
+    const token = localStorage.getItem('fleetops_token');
+    
+    fetch(`/api/reports/export?${params.toString()}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            if (response.status === 403) {
+                throw new Error("Access Denied: Only ADMINs can generate reports.");
+            }
+            throw new Error("Failed to generate report.");
+        }
+        
+        // Extract filename from headers if possible
+        let filename = `fleetops_${reportType.toLowerCase()}_report.${format}`;
+        const disposition = response.headers.get('Content-Disposition');
+        if (disposition && disposition.indexOf('filename=') !== -1) {
+            const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+            const matches = filenameRegex.exec(disposition);
+            if (matches != null && matches[1]) { 
+                filename = matches[1].replace(/['"]/g, '');
+            }
+        }
+        
+        return response.blob().then(blob => ({ blob, filename }));
+    })
+    .then(({blob, filename}) => {
+        // Trigger download
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    })
+    .catch(error => {
+        msg.textContent = error.message;
+        msg.style.display = 'block';
     });
 }

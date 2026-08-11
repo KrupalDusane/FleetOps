@@ -9,9 +9,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "drivers")
+@Table(name = "drivers", indexes = {
+    @Index(name = "idx_driver_deleted", columnList = "is_deleted"),
+    @Index(name = "idx_driver_deleted_at", columnList = "deleted_at")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -43,7 +47,17 @@ public class Driver {
     @Column(nullable = false)
     private DriverStatus status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehicle_id")
     private Vehicle currentVehicle;
+
+    @Builder.Default
+    @Column(name = "is_deleted", nullable = false)
+    private boolean deleted = false;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    @Column(name = "deleted_by")
+    private String deletedBy;
 }

@@ -23,7 +23,7 @@
 hs_err_pid*
 replay_pid*
 
-# Build tools
+# Maven
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -35,16 +35,36 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
-# IDEs
+# IntelliJ IDEA
 .idea/
-*.iml
 *.iws
-.vscode/
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# Eclipse
+.apt_generated
 .classpath
+.factorypath
 .project
-.settings/
+.settings
 .springBeans
-.sts4-cache/
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
 
 # OS generated files
 .DS_Store
@@ -55,11 +75,25 @@ buildNumber.properties
 ehthumbs.db
 Thumbs.db
 
-# Temporary test payloads & scripts
-*.json
-!package.json
-cookie.txt
-*.ps1
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Local Database
+# FleetOps Enterprise Specific
+uploads/
+*.pdf
+*.xlsx
+*.csv
+
+# Node
+node_modules/
+
+# Temporary
+tmp/
+temp/
+
+# Database
 mysql-data/

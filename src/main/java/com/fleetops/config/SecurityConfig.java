@@ -25,6 +25,8 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable) // Disabled to allow api.js to work seamlessly without token management for now
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login", "/css/**", "/js/**", "/images/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                .requestMatchers("/audit", "/api/audit-logs", "/deleted-records", "/api/admin/**", "/api/documents/upload").hasRole("ADMIN")
+                .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .exceptionHandling(exception -> exception
@@ -56,11 +58,14 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @org.springframework.beans.factory.annotation.Value("${ADMIN_PASSWORD:password}")
+    private String adminPassword;
+
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails admin = User.builder()
                 .username("admin")
-                .password("{noop}password") // {noop} is required for plaintext passwords in Spring Security 5+
+                .password("{noop}" + adminPassword) // {noop} is required for plaintext passwords in Spring Security 5+
                 .roles("ADMIN")
                 .build();
 

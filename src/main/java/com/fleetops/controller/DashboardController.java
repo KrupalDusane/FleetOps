@@ -25,13 +25,13 @@ public class DashboardController {
     @Operation(summary = "Get dashboard statistics", description = "Retrieves live aggregates and counts for the dashboard")
     public ResponseEntity<DashboardStats> getStats() {
         DashboardStats stats = dashboardService.getDashboardStats();
-        return new ResponseEntity<>(stats, HttpStatus.OK);
+        return ResponseEntity.ok(stats);
     }
 
     @GetMapping("/recent-vehicles")
     @Operation(summary = "Get recent vehicles", description = "Retrieves the latest 5 vehicles")
     public ResponseEntity<java.util.List<com.fleetops.entity.Vehicle>> getRecentVehicles() {
         java.util.List<com.fleetops.entity.Vehicle> vehicles = dashboardService.getRecentVehicles();
-        return new ResponseEntity<>(vehicles, HttpStatus.OK);
+        return ResponseEntity.ok(vehicles);
     }
 }

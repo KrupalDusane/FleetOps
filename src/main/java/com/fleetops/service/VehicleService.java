@@ -9,6 +9,8 @@ public interface VehicleService {
     Vehicle getVehicleById(Long id);
     Vehicle updateVehicle(Long id, Vehicle vehicle);
     void deleteVehicle(Long id);
+    void restoreVehicle(Long id);
     
     org.springframework.data.domain.Page<Vehicle> searchAndFilterVehicles(String search, com.fleetops.entity.VehicleStatus status, org.springframework.data.domain.Pageable pageable);
+    org.springframework.data.domain.Page<Vehicle> getDeletedVehicles(org.springframework.data.domain.Pageable pageable);
 }

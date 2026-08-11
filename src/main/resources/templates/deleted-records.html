@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deleted Records - FleetOps</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .restore-btn {
+            background-color: #10B981;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .restore-btn:hover {
+            background-color: #059669;
+        }
+        .filter-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .filter-controls select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon">ðŸšš</div>
+                <h2>FleetOps</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="/dashboard"><span class="icon">ðŸ“Š</span> Dashboard</a></li>
+                    <li><a href="/vehicles"><span class="icon">ðŸš›</span> Vehicles</a></li>
+                    <li><a href="/drivers"><span class="icon">ðŸ‘¤</span> Drivers</a></li>
+                    <li><a href="/fuel"><span class="icon">ðŸ’§</span> Fuel Logs</a></li>
+                    <li><a href="/maintenance"><span class="icon">ðŸ”§</span> Maintenance</a></li>
+                    <li><a href="/reports"><span class="icon">ðŸ“ˆ</span> Reports</a></li>
+                    <li><a href="/deleted-records" class="active"><span class="icon">ðŸ—‘ï¸</span> Recycle Bin</a></li>
+                    <li><a href="/audit"><span class="icon">ðŸ”</span> Audit Logs</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="/login" class="logout-link"><span class="icon">ðŸšª</span> Logout</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-wrapper">
+            <!-- Top Navbar -->
+            <header class="topbar">
+                <div class="topbar-title">
+                    <h1>Deleted Records (Recycle Bin)</h1>
+                </div>
+                <div class="topbar-info">
+                    <div class="current-date" id="currentDate">Loading date...</div>
+                    <div class="user-profile">
+                        <div class="avatar">AD</div>
+                        <div class="user-info">
+                            <span class="user-name">Admin</span>
+                            <span class="user-role">Administrator</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <main class="content">
+                <section class="data-section">
+                    <div class="section-header">
+                        <h2>Deleted Entities</h2>
+                    </div>
+
+                    <div class="filter-controls">
+                        <select id="entityTypeFilter" onchange="fetchDeletedRecords(0)">
+                            <option value="vehicles">Vehicles</option>
+                            <option value="drivers">Drivers</option>
+                            <option value="fuel-logs">Fuel Logs</option>
+                            <option value="maintenance">Maintenance Logs</option>
+                        </select>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr id="tableHeaders">
+                                    <th>ID</th>
+                                    <th>Identifier</th>
+                                    <th>Deleted By</th>
+                                    <th>Deleted At</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="deletedRecordsTableBody">
+                                <!-- Rows injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="pagination" id="paginationControls">
+                        <!-- Pagination injected by JS -->
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/deleted-records.js"></script>
+    <script>
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    </script>
+</body>
+</html>
+

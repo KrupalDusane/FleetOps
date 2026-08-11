@@ -18,6 +18,8 @@ public interface MaintenanceService {
     Maintenance updateMaintenance(Long id, Maintenance maintenance);
 
     void deleteMaintenance(Long id);
+    void restoreMaintenance(Long id);
 
     Page<Maintenance> searchAndFilterMaintenance(Long vehicleId, String garage, MaintenanceStatus status, Pageable pageable);
+    Page<Maintenance> getDeletedMaintenance(Pageable pageable);
 }

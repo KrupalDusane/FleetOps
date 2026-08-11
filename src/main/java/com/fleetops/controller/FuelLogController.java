@@ -42,12 +42,18 @@ public class FuelLogController {
     }
 
     @GetMapping("/search")
-    @Operation(summary = "Search and filter fuel logs", description = "Filter by Vehicle ID or Date with pagination and sorting")
+    @Operation(summary = "Search and filter fuel logs", description = "Filter by Vehicle ID, Date, Cost, and Quantity ranges with pagination and sorting")
     public ResponseEntity<Page<FuelLog>> searchFuelLogs(
             @RequestParam(required = false) Long vehicleId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fuelDate,
+            @RequestParam(required = false) Double minCost,
+            @RequestParam(required = false) Double maxCost,
+            @RequestParam(required = false) Double minQty,
+            @RequestParam(required = false) Double maxQty,
             @PageableDefault(size = 10, sort = "fuelDate", direction = org.springframework.data.domain.Sort.Direction.DESC) Pageable pageable) {
-        Page<FuelLog> logsPage = fuelLogService.searchAndFilterFuelLogs(vehicleId, fuelDate, pageable);
+        
+        // Use advanced filters to satisfy the analytics criteria
+        Page<FuelLog> logsPage = fuelLogService.searchWithAdvancedFilters(vehicleId, fuelDate, minCost, maxCost, minQty, maxQty, pageable);
         return new ResponseEntity<>(logsPage, HttpStatus.OK);
     }
 
